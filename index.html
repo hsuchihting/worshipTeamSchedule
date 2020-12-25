@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>worship data practice</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/worship.css" />
+</head>
+
+<body>
+	<div id="app">
+		<template>
+			<h1>台北榮耀堂敬拜團服事表</h1>
+			<caption>
+				開發測試用
+			</caption>
+			<table class="table table-hover table-responsive table-striped">
+				<thead>
+					<tr class="table-warning">
+						<th scope="col">日期</th>
+						<th scope="col">主領</th>
+						<th scope="col">歌手</th>
+						<th scope="col">琴手</th>
+						<th scope="col">電吉他手</th>
+						<th scope="col">鼓手</th>
+						<th scope="col">薩克斯風</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="(date, index) in dates" :key="index">
+						<template v-if="index > 0">
+							<th scope="col">{{ date }}</th>
+							<td>{{ candidates(worshipTable, index) }}</td>
+							<td>{{ candidates(vocalTable, index) }}</td>
+							<td>{{ candidates(keyboardTable, index) }}</td>
+							<td>{{ candidates(elecGuitarTable, index) }}</td>
+							<td>{{ candidates(drummerTable, index) }}</td>
+							<td>{{ candidates(saxTable, index) }}</td>
+						</template>
+					</tr>
+				</tbody>
+			</table>
+		</template>
+	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"></script>
+
+	<script>
+		let worshipLeader =
+			'https://spreadsheets.google.com/feeds/cells/1VS99Gh0lN_cYZsaTe7cTxTPVTnT0e4p_rYAE1cSb8cU/1/public/values?alt=json';
+		let vocal =
+			'https://spreadsheets.google.com/feeds/cells/1VS99Gh0lN_cYZsaTe7cTxTPVTnT0e4p_rYAE1cSb8cU/2/public/values?alt=json';
+		let kb =
+			'https://spreadsheets.google.com/feeds/cells/1VS99Gh0lN_cYZsaTe7cTxTPVTnT0e4p_rYAE1cSb8cU/3/public/values?alt=json';
+		let eg =
+			'https://spreadsheets.google.com/feeds/cells/1VS99Gh0lN_cYZsaTe7cTxTPVTnT0e4p_rYAE1cSb8cU/4/public/values?alt=json';
+		let sax =
+			'https://spreadsheets.google.com/feeds/cells/1VS99Gh0lN_cYZsaTe7cTxTPVTnT0e4p_rYAE1cSb8cU/5/public/values?alt=json';
+		let choir1 =
+			'https://spreadsheets.google.com/feeds/cells/1VS99Gh0lN_cYZsaTe7cTxTPVTnT0e4p_rYAE1cSb8cU/6/public/values?alt=json';
+		let choir2 =
+			'https://spreadsheets.google.com/feeds/cells/1VS99Gh0lN_cYZsaTe7cTxTPVTnT0e4p_rYAE1cSb8cU/7/public/values?alt=json';
+		let drum =
+			'https://spreadsheets.google.com/feeds/cells/1VS99Gh0lN_cYZsaTe7cTxTPVTnT0e4p_rYAE1cSb8cU/8/public/values?alt=json';
+
+		let data =
+			'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-069?Authorization=CWB-08737147-8E37-4BCD-8118-2014EF09BC45';
+		//vue
+		let vm = new Vue({
+			el: '#app',
+			data() {
+				return {
+					data: [],
+					dates: [],
+					worshipTable: [],
+					vocalTable: [],
+					keyboardTable: [],
+					elecGuitarTable: [],
+					drummerTable: [],
+					saxTable: [],
+					schedule: '',
+					table: []
+				};
+			},
+			created() {
+				let apis = [
+					{
+						table: this.worshipTable,
+						url: worshipLeader
+					},
+					{
+						table: this.vocalTable,
+						url: vocal
+					},
+					{
+						table: this.keyboardTable,
+						url: kb
+					},
+					{
+						table: this.elecGuitarTable,
+						url: eg
+					},
+					{
+						table: this.drummerTable,
+						url: drum
+					},
+					{
+						table: this.saxTable,
+						url: sax
+					}
+				];
+
+				apis.forEach((item) => {
+					axios.get(item.url)
+						.then(({ data }) => {
+							this.createEmptyArray(item.table, data.feed.entry)
+
+							return data
+						})
+						.then((data) => {
+							this.fillIn(item.table, data.feed.entry)
+
+							return data
+						})
+						.then(() => {
+							this.dates = this.worshipTable.map((item, index) => {
+								return item[0]
+							})
+
+							this.$forceUpdate()
+						})
+						.catch(() => {
+							console.warn(item.url + ' table 不存在哦')
+						})
+				})
+
+
+				// axios.get(worshipLeader).then(({ data }) => {
+				// 	this.createEmptyArray(this.worshipTable, data.feed.entry)
+
+				// 	return data
+
+				// 	// this.data = res.data.feed.entry;
+				// 	// console.log(this.data);
+				// 	// this.getSchedule();
+				// })
+				// .then((data) => {
+				// 	this.fillIn(this.worshipTable, data.feed.entry)
+
+				// 	return data
+				// })
+				// .then(() => {
+				// 	this.dates = this.worshipTable.map((item, index) => {
+				// 		return item[0]
+				// 	})
+
+				// 	this.$forceUpdate()
+				// });
+			},
+			methods: {
+				getSchedule(item) {
+					this.schedule = '';
+					this.data.forEach((item) => {
+						console.log(item);
+						let obj = item;
+						if (obj.row == 1) {
+							this.schedule = item.$t;
+						}
+					});
+					return this.schedule;
+					// return this.schedule;
+					// let obj = item;
+					// // console.log(obj);
+					// if (obj.row == 1) {
+					// 	return obj.$t;
+					// }
+				},
+				getLeader(item) {
+					let row = item.row;
+					let col = item.col;
+					let name = item.$t;
+					// console.log(row, col, name);
+					let leader = new Array();
+
+					for (let i = 0; i < 10; i++) {
+						leader[i] = new Array();
+						for (let j = 0; j < 10; j++) {
+							leader[i][j] = 0;
+						}
+					}
+					console.log(leader);
+				},
+				// 建立空陣列
+				createEmptyArray(table, entries) {
+					let maxCol = 0
+					let maxRow = 0
+
+					entries.forEach((item) => {
+						if (item.gs$cell.col > maxCol) {
+							maxCol = parseInt(item.gs$cell.col)
+						}
+
+						if (item.gs$cell.row > maxRow) {
+							maxRow = parseInt(item.gs$cell.row)
+						}
+					})
+
+					for (let i = 0; i < maxCol; i++) {
+						table.push(Array(maxRow).fill('1'))
+					}
+				},
+				// 過門 (填值)
+				fillIn(table, entries) {
+					entries.forEach((item) => {
+						table[item.gs$cell.col - 1][item.gs$cell.row - 1] = item.gs$cell.$t
+					})
+				},
+				// 找到可用的人選
+				candidates(table, index) {
+					let pool = []
+
+					for (let i in table[index]) {
+						if (table[index][i] == '1') {
+							pool.push(table[0][i])
+						}
+					}
+
+					return pool.join(', ')
+				}
+			},
+		});
+	</script>
+</body>
+
+</html>

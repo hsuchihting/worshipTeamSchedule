@@ -1,0 +1,30 @@
+@import 'reset';
+
+.container {
+	background-color: #eeeeee;
+}
+.container {
+	width: 500px;
+	margin: 0 auto;
+	.title {
+		width: 100%;
+		.input p {
+			padding: 3%;
+		}
+	}
+}
+.menu {
+	display: block;
+	width: 500px;
+	margin: 0 auto;
+	.title {
+		padding: 3%;
+		display: flex;
+		align-items: center;
+		input,
+		select {
+			margin-left: 2%;
+			padding: 2%;
+		}
+	}
+}

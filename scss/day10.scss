@@ -1,0 +1,37 @@
+@import 'reset';
+
+.container {
+	margin: 0 auto;
+	width: 800px;
+}
+.inputGroup {
+	padding: 3% 0;
+	display: flex;
+  justify-content: space-around;
+  background-color: #eeeeee;
+}
+.btn {
+	width: 10%;
+	border: none;
+	color: #fff;
+	outline: none;
+	cursor: pointer;
+}
+.btnSubmit {
+	background-color: #1ca873;
+}
+.btnCancel {
+	background: #aaa;
+}
+
+.menuItem {
+	display: flex;
+	justify-content: space-around;
+	padding: 3%;
+	.btnEdit {
+		background-color: orange;
+	}
+	.btnDelete {
+		background-color: red;
+	}
+}

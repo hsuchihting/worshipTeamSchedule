@@ -1,0 +1,49 @@
+@import '_reset';
+
+body {
+	background-color: #eee;
+}
+
+.container {
+	width: 960px;
+	margin: 0 auto;
+
+	img {
+		width: 100%;
+	}
+	h1 {
+		text-align: center;
+		padding: 3% 0;
+		font-size: 30px;
+	}
+	.option {
+		width: 100%;
+		padding: 3%;
+	}
+	.optionTitle {
+		width: 90%;
+	}
+	.option,
+	.optionTitle {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 18px;
+		.number,
+		.type,
+		.title {
+			padding: 0 1%;
+		}
+	}
+}
+
+//vue animation: ;
+.fade-enter,
+.fade-leave-to {
+	opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.5s;
+}

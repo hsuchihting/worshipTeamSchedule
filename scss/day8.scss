@@ -1,0 +1,32 @@
+@import 'reset';
+
+a {
+	text-decoration: none;
+	color: #fff;
+	display: flex;
+	justify-content: center;
+}
+
+body {
+	background-color: #333;
+}
+.container {
+	width: 800px;
+	margin: 3% auto 0 auto;
+	form {
+		display: flex;
+		justify-content: space-around;
+		select {
+			width: 45%;
+			padding: 10px;
+		}
+	}
+
+	.description {
+		p {
+      color: #fff;
+      text-align: center;
+      padding: 5% 0;
+		}
+	}
+}
