@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/* Tailwind v4 safelist: ensure dynamic color classes are included */
+@source inline("{bg,text,border}-{orange-500,gray-500,red-600,purple-500}");
