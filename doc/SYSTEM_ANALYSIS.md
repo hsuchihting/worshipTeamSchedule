@@ -96,7 +96,7 @@ interface Schedule {
 ```
 
 ## 6. VS Code 開發目錄架構建議
-
+```
 BandScheduler/
 ├── components/
 │   ├── calendar/
@@ -113,3 +113,4 @@ BandScheduler/
 ├── types/
 │   └── index.ts                # TypeScript 型別宣告
 └── tailwind.config.js          # Tailwind 主題顏色配置
+```
